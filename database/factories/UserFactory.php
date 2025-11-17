@@ -25,12 +25,10 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'phone_number' => fake()->boolean(80) ? '06' . fake()->numerify('########') : null,
             'email_verified_at' => now(),
             'password' => static::$password ??= 'password',
             'remember_token' => Str::random(10),
-            'two_factor_secret' => Str::random(10),
-            'two_factor_recovery_codes' => Str::random(10),
-            'two_factor_confirmed_at' => now(),
         ];
     }
 
@@ -45,14 +43,22 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model does not have two-factor authentication configured.
+     * User with phone number
      */
-    public function withoutTwoFactor(): static
+    public function withPhone(): static
     {
         return $this->state(fn (array $attributes) => [
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'two_factor_confirmed_at' => null,
+            'phone_number' => '06' . fake()->numerify('########'),
+        ]);
+    }
+
+    /**
+     * User without phone number
+     */
+    public function withoutPhone(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'phone_number' => null,
         ]);
     }
 }

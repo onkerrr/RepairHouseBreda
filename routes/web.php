@@ -17,6 +17,9 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    Route::view('appointments', 'appointments')->name('appointments.index');
+    Route::view('offers', 'offers')->name('offers.index');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');

@@ -17,45 +17,74 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1️⃣ Create Roles
+        $adminRole = Role::firstOrCreate(['name' => 'admin'], ['guard_name' => 'web']);
+        $moderatorRole = Role::firstOrCreate(['name' => 'moderator'], ['guard_name' => 'web']);
+        $userRole = Role::firstOrCreate(['name' => 'user'], ['guard_name' => 'web']);
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        Role::firstOrCreate(['name' => 'admin'], ['guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'moderator'], ['guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'user'], ['guard_name' => 'web']);
-
-        $admin = User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password')
+        // 2️⃣ Create Admin Account
+        $admin = User::factory()->withPhone()->create([
+            'name' => 'Admin',
+            'email' => 'admin@repairhousebreda.nl',
+            'phone_number' => '0612345678',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
-        $admin->assignRole('admin');
+        $admin->assignRole($adminRole);
 
-        $moderator = User::factory()->create([
-            'name' => 'Moderator User',
-            'email' => 'moderator@example.com',
-            'password' => bcrypt('password')
+        // 3️⃣ Create Additional Staff
+        $moderator = User::factory()->withPhone()->create([
+            'name' => 'Moderator',
+            'email' => 'moderator@repairhousebreda.nl',
+            'phone_number' => '0687654321',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
-        $moderator->assignRole('moderator');
+        $moderator->assignRole($moderatorRole);
 
-        $user = User::factory()->create([
-            'name' => 'Normal User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password')
+        // 4️⃣ Create Regular Users (some with accounts, some without)
+        $regularUsers = User::factory(15)->create();
+        foreach ($regularUsers as $user) {
+            $user->assignRole($userRole);
+        }
+
+        // 5️⃣ Create Repair Types (realistic phone brands and repairs)
+        RepairType::factory(25)->create();
+
+        // 6️⃣ Create Appointments with different statuses
+        // Pending appointments
+        Appointment::factory(8)->pending()->create();
+        
+        // In progress appointments (with sub-statuses)
+        Appointment::factory(5)->inProgress()->create();
+        
+        // Completed appointments
+        Appointment::factory(12)->completed()->create();
+        
+        // Cancelled appointments
+        Appointment::factory(3)->cancelled()->create();
+        
+        // Admin-created appointments (without user_id)
+        Appointment::factory(4)->withoutUser()->create();
+
+        // 7️⃣ Create Offers
+        // Active offers
+        Offer::factory(5)->active()->create([
+            'created_by' => $admin->id,
         ]);
-        $user->assignRole('user');
+        
+        // Expired offers
+        Offer::factory(3)->expired()->create([
+            'created_by' => $admin->id,
+        ]);
+        
+        // Upcoming offers
+        Offer::factory(2)->upcoming()->create([
+            'created_by' => $moderator->id,
+        ]);
 
-        // 3️⃣ RepairTypes
-        RepairType::factory()->count(5)->create();
-
-        // 4️⃣ Appointments
-        Appointment::factory()->count(10)->create();
-
-        // 5️⃣ Offers
-        Offer::factory()->count(5)->create();
+        $this->command->info('Database seeded successfully!');
+        $this->command->info('Admin: admin@repairhousebreda.nl / password');
+        $this->command->info('Moderator: moderator@repairhousebreda.nl / password');
     }
 }

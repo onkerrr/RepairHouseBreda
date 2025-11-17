@@ -13,11 +13,13 @@ return new class extends Migration {
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->uuid('uuid')->unique();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('repair_type_id')->nullable()->constrained('repair_types')->nullOnDelete();
             $table->dateTime('appointment_date');
             $table->text('issue_description')->nullable();
             $table->string('status')->default(AppointmentStatus::Pending->value);
+            $table->string('sub_status')->nullable();
             $table->integer('estimated_repair_duration')->nullable();
             $table->timestamps();
         });

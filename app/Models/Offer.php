@@ -13,7 +13,15 @@ class Offer extends Model
         'created_by', 'title', 'price_before', 'price_after', 'start_date', 'end_date'
     ];
 
-    public function creator() {
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'price_before' => 'decimal:2',
+        'price_after' => 'decimal:2',
+    ];
+
+    public function creator()
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
 }

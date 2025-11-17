@@ -9,7 +9,7 @@ class RepairType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['brand', 'description'];
 
     public function appointments()
     {

@@ -18,10 +18,56 @@ class RepairTypeFactory extends Factory
      */
     public function definition(): array
     {
+        $brands = [
+            'iPhone' => [
+                'Scherm vervanging',
+                'Batterij vervanging',
+                'Camera reparatie',
+                'Oplaadpoort reparatie',
+                'Water schade behandeling',
+                'Back cover vervanging',
+            ],
+            'Samsung' => [
+                'Display reparatie',
+                'Batterij vervangen',
+                'Camera module vervangen',
+                'USB-C poort reparatie',
+                'Software update & reset',
+                'Achterkant glas vervangen',
+            ],
+            'Huawei' => [
+                'Scherm reparatie',
+                'Accu vervanging',
+                'Laadpoort vervanging',
+                'Speaker reparatie',
+                'Microfoon reparatie',
+            ],
+            'OnePlus' => [
+                'Display vervangen',
+                'Batterij service',
+                'Poort reparatie',
+                'Camera reparatie',
+            ],
+            'Google Pixel' => [
+                'Screen replacement',
+                'Battery swap',
+                'Charging port fix',
+                'Back glass replacement',
+            ],
+            'Xiaomi' => [
+                'Scherm reparatie',
+                'Batterij vervangen',
+                'Oplaadpoort reparatie',
+                'Camera vervanging',
+            ],
+        ];
+
+        $brand = $this->faker->randomElement(array_keys($brands));
+        $description = $this->faker->randomElement($brands[$brand]);
+
         return [
-            'name' => $this->faker->word() . ' Repair',
-            'description' => $this->faker->sentence(),
+            'brand' => $brand,
+            'description' => $description,
         ];
     }
-// per merk graag 
 }
