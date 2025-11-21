@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1️⃣ Create Roles
+        // Create Roles
         $adminRole = Role::firstOrCreate(['name' => 'admin'], ['guard_name' => 'web']);
         $moderatorRole = Role::firstOrCreate(['name' => 'moderator'], ['guard_name' => 'web']);
         $userRole = Role::firstOrCreate(['name' => 'user'], ['guard_name' => 'web']);
 
-        // 2️⃣ Create Admin Account
+        // Create Admin Account
         $admin = User::factory()->withPhone()->create([
             'name' => 'Admin',
             'email' => 'admin@repairhousebreda.nl',
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        // 3️⃣ Create Additional Staff
+        // Create Additional Staff
         $moderator = User::factory()->withPhone()->create([
             'name' => 'Moderator',
             'email' => 'moderator@repairhousebreda.nl',
@@ -42,16 +42,16 @@ class DatabaseSeeder extends Seeder
         ]);
         $moderator->assignRole($moderatorRole);
 
-        // 4️⃣ Create Regular Users (some with accounts, some without)
+        // Create Regular Users (some with accounts, some without)
         $regularUsers = User::factory(15)->create();
         foreach ($regularUsers as $user) {
             $user->assignRole($userRole);
         }
 
-        // 5️⃣ Create Repair Types (realistic phone brands and repairs)
+        // Create Repair Types (realistic phone brands and repairs)
         RepairType::factory(25)->create();
 
-        // 6️⃣ Create Appointments with different statuses
+        // Create Appointments with different statuses
         // Pending appointments
         Appointment::factory(8)->pending()->create();
         
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         // Admin-created appointments (without user_id)
         Appointment::factory(4)->withoutUser()->create();
 
-        // 7️⃣ Create Offers
+        // Create Offers
         // Active offers
         Offer::factory(5)->active()->create([
             'created_by' => $admin->id,

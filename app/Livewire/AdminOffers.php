@@ -12,14 +12,14 @@ class AdminOffers extends Component
     public $showModal = false;
     public $showDeleteModal = false;
     public $showDetailModal = false;
-    
+
     public $offerId;
     public $title;
     public $price_before;
     public $price_after;
     public $start_date;
     public $end_date;
-    
+
     public $selectedOffer;
     public $filterStatus = 'all'; // all, active, expired, upcoming
 
@@ -42,7 +42,7 @@ class AdminOffers extends Component
 
         if ($this->filterStatus === 'active') {
             $query->whereDate('start_date', '<=', now())
-                  ->whereDate('end_date', '>=', now());
+                ->whereDate('end_date', '>=', now());
         } elseif ($this->filterStatus === 'expired') {
             $query->whereDate('end_date', '<', now());
         } elseif ($this->filterStatus === 'upcoming') {
@@ -67,14 +67,14 @@ class AdminOffers extends Component
     public function edit($id)
     {
         $offer = Offer::findOrFail($id);
-        
+
         $this->offerId = $offer->id;
         $this->title = $offer->title;
         $this->price_before = $offer->price_before;
         $this->price_after = $offer->price_after;
         $this->start_date = $offer->start_date->format('Y-m-d');
         $this->end_date = $offer->end_date->format('Y-m-d');
-        
+
         $this->showModal = true;
     }
 
@@ -97,7 +97,7 @@ class AdminOffers extends Component
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
             ]);
-            
+
             session()->flash('message', 'Aanbieding succesvol bijgewerkt.');
         } else {
             Offer::create([
@@ -108,7 +108,7 @@ class AdminOffers extends Component
                 'end_date' => $this->end_date,
                 'created_by' => auth()->id(),
             ]);
-            
+
             session()->flash('message', 'Aanbieding succesvol aangemaakt.');
         }
 
@@ -126,10 +126,10 @@ class AdminOffers extends Component
     public function delete()
     {
         Offer::findOrFail($this->offerId)->delete();
-        
+
         $this->showDeleteModal = false;
         $this->loadOffers();
-        
+
         session()->flash('message', 'Aanbieding succesvol verwijderd.');
         $this->dispatch('offer-deleted');
     }
