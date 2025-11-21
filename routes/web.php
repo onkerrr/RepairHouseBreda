@@ -18,6 +18,11 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     Route::view('appointments', 'appointments')->name('appointments.index');
     Route::view('offers', 'offers')->name('offers.index');
+    
+    // Inventory routes
+    Route::view('inventory/brands', 'inventory.brands')->name('inventory.brands');
+    Route::view('inventory/models', 'inventory.models')->name('inventory.models');
+    Route::view('inventory/parts', 'inventory.parts')->name('inventory.parts');
 
     Route::redirect('settings', 'settings/profile');
 
