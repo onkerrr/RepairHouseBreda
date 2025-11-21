@@ -117,6 +117,17 @@ class AdminParts extends Component
         $this->loadParts();
     }
 
+    public function updatedFilterBrand()
+    {
+        $this->filterModel = 'all';
+        $this->loadParts();
+    }
+
+    public function updatedFilterModel()
+    {
+        $this->loadParts();
+    }
+
     public function create()
     {
         $this->reset(['partId', 'selected_brand_id', 'device_model_id', 'name', 'sku', 'description', 'price', 'stock', 'min_stock']);

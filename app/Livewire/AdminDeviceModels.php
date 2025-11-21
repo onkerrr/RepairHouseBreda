@@ -72,6 +72,11 @@ class AdminDeviceModels extends Component
         $this->loadDeviceModels();
     }
 
+    public function updatedFilterBrand()
+    {
+        $this->loadDeviceModels();
+    }
+
     public function create()
     {
         $this->reset(['modelId', 'brand_id', 'name', 'description']);
